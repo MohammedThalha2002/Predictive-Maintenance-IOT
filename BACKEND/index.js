@@ -25,10 +25,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/show-data", (req, res) => {
-  res.json({
-    message: "SUCCESS",
-    data: sensorData,
-  });
+  res.send(sensorData);
 });
 
 app.post("/test", (req, res) => {
