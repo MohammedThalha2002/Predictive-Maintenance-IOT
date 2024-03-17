@@ -28,7 +28,7 @@ app.get("/show-data", (req, res) => {
   res.send(sensorData);
 });
 
-app.post("/test", (req, res) => {
+app.post("/post-data", (req, res) => {
   try {
     sensorData = req.body;
     res.send("SUCCESS");
