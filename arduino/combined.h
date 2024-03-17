@@ -9,7 +9,7 @@ DHT dht(DHT11PIN, DHT11);
 
 const char* ssid = "THALHA";
 const char* password = "12345678";
-const char* serverName = "http://192.168.43.84:3000/test"; // Replace with your server URL
+const char* serverName = "https://predictive-maintenance-iot.vercel.app/post-data";
 
 // Vibration Sensor - SW420
 const int vibrationSensorPin = A0; // GPIO36 - ADC1_0
@@ -18,7 +18,7 @@ const int vibrationSensorPin = A0; // GPIO36 - ADC1_0
 const int speedSensorPin = 23; // GPIO
 volatile unsigned long pulseCount = 0;
 unsigned long lastTime = 0;
-unsigned long rpm = 0;
+
 
 // Sound Sensor - LM393
 const int soundSensorPin = A3; // ADC1_3
@@ -31,6 +31,14 @@ const int voltageSensorPin = A7; // ADC1_7
 
 // Current Sensor - ACS712
 ACS712 currentSensor(A5, 3.3, 4095, 185); // Change pins and parameters if necessary
+
+// PARAMETERS
+unsigned long rpm = 0;
+float vibrationValue = 0;
+float db = 0;
+float temperatureC = 0;
+float voltageValue = 0;
+float currentmA = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -79,7 +87,7 @@ void printAndPostSensorValues() {
   // ... Existing code for printing sensor values ...
 
   // Vibration Sensor - SW420
-  int vibrationValue = analogRead(vibrationSensorPin);
+  vibrationValue = analogRead(vibrationSensorPin);
   Serial.print("Vibration: ");
   Serial.println(vibrationValue);
 
@@ -106,7 +114,7 @@ void printAndPostSensorValues() {
   }
 
   peakToPeak = signalMax - signalMin;
-  int db = map(peakToPeak, 20, 900, 49.5, 90);
+  db = map(peakToPeak, 20, 900, 49.5, 90);
   db = random(29,33);
   Serial.print("Loudness: ");
   Serial.print(db);
@@ -119,13 +127,13 @@ void printAndPostSensorValues() {
   Serial.println(" C");
 
   // Voltage Sensor - ZMPT101B
-  int voltageValue = analogRead(voltageSensorPin);
+  voltageValue = analogRead(voltageSensorPin);
   voltageValue = random(229,238);
   Serial.print("Voltage: ");
   Serial.println(voltageValue);
 
   // Current Sensor - ACS712
-  float currentmA = currentSensor.mA_AC_sampling();
+  currentmA = currentSensor.mA_AC_sampling();
   Serial.print("Current: ");
   currentmA = random(15,20) / 10.0;
   Serial.print(currentmA);
