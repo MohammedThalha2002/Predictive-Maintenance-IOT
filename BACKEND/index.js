@@ -33,7 +33,7 @@ app.get("/show-data", (req, res) => {
 
 app.post("/test", (req, res) => {
   try {
-    console.log(req.body);
+    sensorData = req.body;
     res.send("SUCCESS");
   } catch (error) {
     console.log("error");
