@@ -11,7 +11,7 @@ public class getData : MonoBehaviour
     public TextMeshProUGUI rpm;
     public TextMeshProUGUI current;
     public TextMeshProUGUI voltage;
-    // Start is called before the first frame update
+    
     void Start()
     {
         temperature = GameObject.Find("TemperatureText").GetComponent<TextMeshProUGUI>();
