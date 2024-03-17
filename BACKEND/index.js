@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
-require("./config/db");
-const SensorModel = require("./models/SensorModel");
+// require("./config/db");
+// const SensorModel = require("./models/SensorModel");
 
 const app = express();
 
@@ -41,37 +41,37 @@ app.post("/test", (req, res) => {
   }
 });
 
-app.post("/add-data", async (req, res) => {
-  const newData = req.body;
-  // updating the global ref
-  sensorData = newData;
-  try {
-    const sensorData = await SensorModel.findOne();
+// app.post("/add-data", async (req, res) => {
+//   const newData = req.body;
+//   // updating the global ref
+//   sensorData = newData;
+//   try {
+//     const sensorData = await SensorModel.findOne();
 
-    // adding the new data
-    sensorData.vibration.push(newData.vibration);
-    sensorData.rpm.push(newData.rpm);
-    sensorData.sound.push(newData.sound);
-    sensorData.temperature.push(newData.temperature);
-    sensorData.voltage.push(newData.voltage);
-    sensorData.current.push(newData.current);
+//     // adding the new data
+//     sensorData.vibration.push(newData.vibration);
+//     sensorData.rpm.push(newData.rpm);
+//     sensorData.sound.push(newData.sound);
+//     sensorData.temperature.push(newData.temperature);
+//     sensorData.voltage.push(newData.voltage);
+//     sensorData.current.push(newData.current);
 
-    // shifting if it has more data than
-    if (sensorData.vibration.length > 1) sensorData.vibration.shift();
-    if (sensorData.rpm.length > 1) sensorData.rpm.shift();
-    if (sensorData.sound.length > 1) sensorData.sound.shift();
-    if (sensorData.temperature.length > 1) sensorData.temperature.shift();
-    if (sensorData.voltage.length > 1) sensorData.voltage.shift();
-    if (sensorData.current.length > 1) sensorData.current.shift();
+//     // shifting if it has more data than
+//     if (sensorData.vibration.length > 1) sensorData.vibration.shift();
+//     if (sensorData.rpm.length > 1) sensorData.rpm.shift();
+//     if (sensorData.sound.length > 1) sensorData.sound.shift();
+//     if (sensorData.temperature.length > 1) sensorData.temperature.shift();
+//     if (sensorData.voltage.length > 1) sensorData.voltage.shift();
+//     if (sensorData.current.length > 1) sensorData.current.shift();
 
-    // updating the database
-    await SensorModel.updateOne({}, sensorData);
-    res.send("sensorData updated");
-  } catch (error) {
-    console.log(error);
-    res.send(error);
-  }
-});
+//     // updating the database
+//     await SensorModel.updateOne({}, sensorData);
+//     res.send("sensorData updated");
+//   } catch (error) {
+//     console.log(error);
+//     res.send(error);
+//   }
+// });
 
 app.listen(PORT, () => {
   console.log(`Listening to the PORT : ` + PORT);
