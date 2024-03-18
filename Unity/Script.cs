@@ -31,7 +31,7 @@ public class getData : MonoBehaviour
     {
         Debug.Log("Getting Data");
 
-        string uri = "https://predictive-maintenance-iot.vercel.app/show-data";
+        string uri = "https://predictive-maintenance-iot.vercel.app/data";
         using(UnityWebRequest request = UnityWebRequest.Get(uri))
         {
             yield return request.SendWebRequest();
