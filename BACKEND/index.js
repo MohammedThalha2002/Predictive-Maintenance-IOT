@@ -1,82 +1,51 @@
-const express = require("express");
-// const cors = require("cors");
-// require("./config/db");
-// const SensorModel = require("./models/SensorModel");
+import express from 'express';
+import cors from 'cors'
+const app = express()
+app.use(cors())
+const port = 3000
+import { initializeApp } from "firebase/app";
+import { getDatabase, onValue, ref } from 'firebase/database'
 
-const app = express();
 
-const PORT = 3000;
-
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  res.header("Access-Control-Allow-credentials", true);
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, UPDATE");
-  next();
-});
-
-app.use(express.json());
-
-let sensorData = {
-  vibration: 0,
-  rpm: 0,
-  sound: 0,
-  temperature: 0,
-  voltage: 0,
-  current: 0,
+const firebaseConfig = {
+    apiKey: "AIzaSyB0IPIrKRugmHUrgdspmcFZkButkKctHkQ",
+    authDomain: "predictive-maintenance-4020e.firebaseapp.com",
+    databaseURL: "https://predictive-maintenance-4020e-default-rtdb.firebaseio.com",
+    projectId: "predictive-maintenance-4020e",
+    storageBucket: "predictive-maintenance-4020e.appspot.com",
+    messagingSenderId: "584970417111",
+    appId: "1:584970417111:web:6fdae09ab92b0039fa1192"
 };
 
-app.get("/", (req, res) => {
-  console.log("GET REQ");
-  res.send("GETTING REQUEST SUCCESSFULLY");
-});
+// Initialize Firebase
+const firebaseapp = initializeApp(firebaseConfig);
+const db = getDatabase();
+const dbRef = ref(db, 'sensor')
 
-app.get("/show-data", (req, res) => {
-  res.send(sensorData);
-});
+let sensorData = {
+    vibration: 0,
+    rpm: 0,
+    sound: 0,
+    temperature: 0,
+    voltage: 0,
+    current: 0,
+};
 
-app.post("/post-data", (req, res) => {
-  try {
-    sensorData = req.body;
-    res.send("SUCCESS");
-  } catch (error) {
-    console.log("error");
-    res.status(400).send("error");
-  }
-});
+onValue(dbRef, (snapshot) => {
+    const data = snapshot.val();
+    console.log(data)
+    sensorData = data;
+})
 
-// app.post("/add-data", async (req, res) => {
-//   const newData = req.body;
-//   // updating the global ref
-//   sensorData = newData;
-//   try {
-//     const sensorData = await SensorModel.findOne();
 
-//     // adding the new data
-//     sensorData.vibration.push(newData.vibration);
-//     sensorData.rpm.push(newData.rpm);
-//     sensorData.sound.push(newData.sound);
-//     sensorData.temperature.push(newData.temperature);
-//     sensorData.voltage.push(newData.voltage);
-//     sensorData.current.push(newData.current);
+app.get('/', (req, res) => {
+    res.send("RUNNING SUCESSFUL")
+})
 
-//     // shifting if it has more data than
-//     if (sensorData.vibration.length > 1) sensorData.vibration.shift();
-//     if (sensorData.rpm.length > 1) sensorData.rpm.shift();
-//     if (sensorData.sound.length > 1) sensorData.sound.shift();
-//     if (sensorData.temperature.length > 1) sensorData.temperature.shift();
-//     if (sensorData.voltage.length > 1) sensorData.voltage.shift();
-//     if (sensorData.current.length > 1) sensorData.current.shift();
+app.get('/data', (req, res) => {
+    res.send(sensorData)
+})
 
-//     // updating the database
-//     await SensorModel.updateOne({}, sensorData);
-//     res.send("sensorData updated");
-//   } catch (error) {
-//     console.log(error);
-//     res.send(error);
-//   }
-// });
-
-app.listen(PORT, () => {
-  console.log(`Listening to the PORT : ` + PORT);
-});
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`)
+})
